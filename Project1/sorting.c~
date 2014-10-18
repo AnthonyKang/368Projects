@@ -1,0 +1,207 @@
+#include <stdio.h>
+#include <stdlib.h>
+//#include <math.h>
+#include "shellsort.h"
+
+
+void Shell_Insertion_Sort(long *Array, int Size, double* N_comp, double *N_move)
+{
+  int i = 0;
+  int j = 0;
+  long temp = 0;
+  int* gaps = NULL;
+  //Array = malloc(sizeof(long)*Size);
+  // Array[2] = 2;
+  //printf("%d", Array[2]);
+  gaps = Gap_Array(gaps, Size);
+  // printf("gaps[5] = %d\n", gaps[5]);
+  //printf("sizeof gaps = %d", sizeof(gaps));
+  int sizeIndex=0;
+  int k = 0;
+  // printf("outside loop\n");
+  while(gaps[sizeIndex] > 0)
+    {
+      
+
+      sizeIndex++;
+    }
+  //printf("sizeIndex = %d\n", sizeIndex);
+  sizeIndex = sizeIndex -1;
+  //printf("%d\n", gaps[sizeIndex]);
+  //printf("%d\n", gaps[sizeIndex-1]);
+  //printf("%d\n", gaps[sizeIndex-2]);
+ for(k = sizeIndex; k >= 0; k--)
+    {
+      //printf("k = %d\n", k);
+      for(i = gaps[k]; i < Size; i++)
+	{
+	  temp = Array[i];
+	  //printf("i = %d\n", i);
+	  for(j = i; j >= gaps[k] && Array[j-gaps[k]]>temp; j-=gaps[k])
+	    {
+	      //printf("j = %d\n", j);
+	      Array[j] = Array[j - gaps[k]];
+	    }
+	  Array[j] = temp;
+	}
+    }
+ /*for(i = 0; i < Size; i++)
+   {
+     printf("In function: %ld\n", Array[i]);
+     }*/
+}
+long * Load_File(char *Filename, int *Size)
+{
+  FILE *myfile = NULL;
+  int i = 0;
+  long temp = 0;
+  long *int_array = NULL;
+  long seek;
+  myfile = fopen(Filename, "r");
+  if(myfile == NULL)
+    {
+      return NULL;
+    }
+  else
+    {
+      while((fscanf(myfile, "%ld", &temp)) == 1)
+	{
+	  i++;
+	}
+    }
+  // printf("i in sorting = %d\n", i);
+  seek = fseek(myfile, 1*sizeof(long), SEEK_SET);
+  *Size = (i - 1);
+  int_array = malloc(sizeof(long)*(i-1));
+  if(seek == 0)
+    {
+      int_array = malloc(sizeof(long)*(i-1));
+      int j = 0;
+      for(j = 0; j< i-1; j++)
+	{
+	  fscanf(myfile, "%ld", &int_array[j]);
+	}
+      return int_array;
+    }
+  else
+    {
+      return NULL;
+    }
+  
+  fclose(myfile);
+}
+
+int Print_Seq(char *Filename, int Size)
+{
+  printf("first line in Print_Seq");
+  int * gaps;
+  int * gap_array_print = NULL;
+  gaps = Gap_Array(gaps, Size);
+  FILE *myfile = NULL;
+  int i = 0;
+  int j = 0;
+  printf("hi in print seq");
+  myfile = fopen(Filename, "w");
+  //printf("did it open");
+  while(gaps[i]>0)
+    {
+      i++;
+    }
+  gap_array_print = malloc(sizeof(int)*(i+1));
+  gap_array_print[0] = i;
+  //printf("i = %d", i);
+  //printf("%d\n", gap_array_print[0]);
+  //printf("%d, %d, %d, %d", gaps[0], gaps[1], gaps[2], gaps[3]);
+  for(j = 1; j<i+1; j++)
+    {
+      gap_array_print[j] = gaps[j-1];
+      //printf("index %d = %d\n", j, gap_array_print[j]);
+    }
+  for(j = 0; j<i+1; j++)
+    {
+      fprintf(myfile, "%d\n", gap_array_print[j]);
+    }
+  fclose(myfile);
+  return i;
+}
+
+
+int* Gap_Array(int * gap_array, int Size)
+{
+  //printf("Enter");
+  int n = 0;
+  int j = 0;
+  int p = 0;
+  int guess = 1;
+  int product = 0;
+  int i = 0;
+  int k = 0;
+  int sub_product1 = 1;
+  int sub_product2 = 1;
+  //printf("hi in gap array");
+  while(guess < Size)
+    {
+      guess = guess*3;
+      n++;
+    }
+  guess = guess/3;
+  gap_array = malloc(sizeof(int)*guess);
+  //printf("Size = %d\n", Size);
+  //printf("guess = %d\n", guess);
+  //printf("size of array = %d\n", (gap_array)); 
+  while(product*3 < Size)
+    {
+      //printf("first loop");
+      for(i = 0; i < n; i++)
+	{
+	  //printf("second loop");
+	  for(p = i; p>=0; p--)
+	    {
+	      sub_product1 = 1;
+	      sub_product2 = 1;
+	      if(p == 0)
+		{
+		  sub_product1 = 1;
+		}
+	      else
+		{
+		  for(k = 0; k < p; k++)
+		    {
+		      sub_product1 = sub_product1 * 2;
+		    }
+		}
+	      //printf("sub_product1 = %d\n",sub_product1);
+	      if((i-p) == 0)
+		{
+		  sub_product2 = 1;
+		}
+	      else
+		{
+		  for(k = 0; k < (i -p); k++)
+		    {
+		      sub_product2 = sub_product2 * 3;
+		    }
+		}
+	      //printf("sub_product2 = %d\n", sub_product2);
+	      product = sub_product1*sub_product2;
+
+	    
+	      //product = pow(2,p)*pow(3,i-p);
+	      //product = sub_product1*sub_product2;
+	    
+	      //printf("produect = %d\n", product);
+	      if(product < Size)
+		{
+		  //printf("product = %d", product);
+		  gap_array[j] = product;
+		  j++;
+		}
+	    }
+	}
+    }
+  //printf("finished");
+  return gap_array;
+
+
+
+}

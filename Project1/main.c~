@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <stdlib.h>
+//#include <math.h>
+#include "sorting.c"
+int main(int argc, char ** argv)
+{
+  int Size = 0;
+  int * test = NULL;
+  long * int_array = NULL;
+  double computations = 0;
+  double moves = 0;
+  int i = 0;
+  //printf("entering Load_File");
+  int_array = Load_File(argv[1], &Size);
+  //Get_Gaps(test,10);
+  //Gap_Array(test,10);
+  //printf("hi from main");
+  
+  // Print_Seq(argv[2],10);
+  /* for(i = 0; i< Size; i++)
+    {
+      printf("before = %ld\n",int_array[i]);
+    }
+  */
+  //printf("entering gap_array");
+  //Gap_Array(test, 10);
+  Print_Seq(argv[2], Size);
+  Shell_Insertion_Sort(int_array, Size, &computations, &moves); 
+  
+  printf("Size = %d\n", Size);
+  for(i = 0; i < Size; i++)
+    {
+      printf("%ld\n",int_array[i]);
+    }
+  
+
+  return 0;
+}
